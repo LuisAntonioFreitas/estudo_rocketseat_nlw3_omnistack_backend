@@ -5,38 +5,31 @@ import path from 'path';
 
 import './database/connection';
 
+import env from './env';
 import routes from './routes';
 import errorHandler from './errors/handler';
 
+// Acesso a banco de dados
 const app = express();
+// Acesso a partir de outros endereços
 app.use(cors());
 
 // Faz o app usar o formato JSON
 app.use(express.json());
 
+// Define variáveis de ambiente
+process.env.NODE_ENV = env;
+
+// Define rotas
 app.use(routes);
-app.use(errorHandler);
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
-
-// Define Variáveis de Ambiente
-const NODE_ENV = process.env.NODE_ENV?.trim();
-if (NODE_ENV === 'development') {
-  // development
-  process.env.NODE_SERVER_PORT = process.env.NODE_DEV_SERVER_PORT;
-
-  process.env.NODE_DB_NAME = process.env.NODE_DEV_DB_NAME;
-  process.env.NODE_DB_PASS = process.env.NODE_DEV_DB_PASS;
-  process.env.NODE_DB_HOST = process.env.NODE_DEV_DB_HOST;
-
-  process.env.NODE_URL_UPDATES = process.env.NODE_DEV_URL_UPDATES?.replace(/{NODE_DEV_SERVER_PORT}/, `${process.env.NODE_DEV_SERVER_PORT}`);
-} else {
-  // production
-  process.env.NODE_URL_UPDATES = process.env.NODE_URL_UPDATES?.replace(/{NODE_SERVER_PORT}/, `${process.env.NODE_SERVER_PORT}`);
-}
+// Define erros
+app.use(errorHandler);
 
 // Ex.: http://localhost:3333/
 app.listen(process.env.NODE_SERVER_PORT);
 
+// Log
 console.log(process.env.NODE_APP_NAME);
 console.log(process.env.NODE_ENV);
 console.log(process.env.NODE_URL_UPDATES);

@@ -49,6 +49,7 @@ export default {
   
     const orphanagesRepository = getRepository(Orphanage);
 
+    // Salvar imagens
     const requestImagens = request.files as Express.Multer.File[];
     const images = requestImagens.map(image => {
       return { path: image.filename }
@@ -65,6 +66,7 @@ export default {
       images
     };
 
+    // Validar dados
     const schema = Yup.object().shape({
       name: Yup.string().required('Nome é um campo obrigatório'),
       latitude: Yup.number().required('Latitude é um campo obrigatório'),
