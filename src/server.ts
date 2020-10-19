@@ -11,6 +11,13 @@ import errorHandler from './errors/handler';
 
 // Acesso a banco de dados
 const app = express();
+
+// favicon
+// var favicon = require('serve-favicon'), path = require("path");
+// app.use(favicon(path.join(__dirname, "/images/favicon.png")));
+
+app.use("/favicon.png", express.static('/public/favicon.png'));
+
 // Acesso a partir de outros endereços
 app.use(cors());
 
@@ -22,6 +29,7 @@ process.env.NODE_ENV = env;
 
 // Define rotas
 app.use(routes);
+app.use('/', express.static(path.join(__dirname, '..', 'public')))
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
 // Define erros
 app.use(errorHandler);
